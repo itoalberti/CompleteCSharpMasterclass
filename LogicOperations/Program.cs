@@ -63,3 +63,7 @@ Console.WriteLine($"f = {f}");
 var z = float.TryParse(inputString, out f);
 Console.WriteLine($"f = {f}");
 Console.WriteLine($"z = {z}");
+
+Console.WriteLine("Starting timer at time t=0.00s");
+Thread.Sleep(2500);
+Console.WriteLine("Finishing timer at time t=2.50s");

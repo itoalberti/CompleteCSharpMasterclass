@@ -20,43 +20,48 @@ string[] rocket =
     "  /  |  |  |  \\",
     "  |,-'--|--'-.|",
 };
-string[] flame = { "     /|||||\\", "    |||||||||", "     \\|||||/", "       \\|/", "        |" };
+string[] flame =
+{
+    "     /|||||\\",
+    "    |||||||||",
+    "     \\|||||/",
+    "      \\|||/",
+    "       \\|/",
+    "        |",
+};
 string ground = "_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_\\|/_";
-
 int windowHeight = rocket.Length + flame.Length;
-
-// Printing processes
+string printedString = "";
 Console.Clear();
+
+// PRINTING FUNCTIONS
+void DrawGround()
+{
+    Console.Write(ground);
+    Thread.Sleep(500);
+}
+
+void DrawScene(string[] element, int lineBreaks)
+{
+    for (int i = 0; i < element.Length; i++)
+    {
+        Console.Clear();
+        printedString = element[element.Length - 1 - i] + "\n" + printedString;
+        Console.Write(printedString);
+        Console.Write(new string('\n', windowHeight - lineBreaks - i));
+        DrawGround();
+    }
+}
 
 // 1) GROUND
 Console.WriteLine(new string('\n', windowHeight));
-Console.Write(ground);
-Thread.Sleep(500);
-
-Console.Clear();
+DrawGround();
 
 // 2) GROUND AND FLAME
-string printedString = "";
-for (int i = 0; i < flame.Length; i++)
-{
-    Console.Clear();
-    printedString = flame[flame.Length - 1 - i] + "\n" + printedString;
-    Console.Write(printedString);
-    Console.Write(new string('\n', windowHeight - i));
-    Console.Write(ground);
-    Thread.Sleep(500);
-}
+DrawScene(flame, 0);
 
 // 3) GROUND, FLAME AND ROCKET
-for (int i = 0; i < rocket.Length; i++)
-{
-    Console.Clear();
-    printedString = rocket[rocket.Length - 1 - i] + "\n" + printedString;
-    Console.Write(printedString);
-    Console.Write(new string('\n', windowHeight - 5 - i));
-    Console.Write(ground);
-    Thread.Sleep(500);
-}
+DrawScene(rocket, flame.Length);
 
 // 4) GROUND AND ROCKET
 int lastIndex;
@@ -66,10 +71,9 @@ for (int i = 0; i < flame.Length + 1; i++)
     lastIndex = printedString.LastIndexOf('\n');
     printedString = '\n' + printedString.Substring(0, lastIndex);
     Console.WriteLine(printedString);
-    Console.WriteLine(ground);
-    Thread.Sleep(500);
+    DrawGround();
 }
 Console.Clear();
 Console.WriteLine("-------ROCKET HAS LANDED!-------");
 Console.WriteLine(printedString);
-Console.WriteLine(ground);
+DrawGround();

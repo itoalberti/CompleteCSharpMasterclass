@@ -6,7 +6,7 @@ namespace LibrarySystem
         public string Title { get; }
         public string Author { get; }
         public int Year { get; }
-        public bool IsAvailable { get; private set; }
+        public bool IsAvailable { get; private set; } = true;
 
         // ============= CONSTRUCTOR =============
         public Book(string title, string author, int year)
@@ -14,19 +14,12 @@ namespace LibrarySystem
             Title = title;
             Author = author;
             Year = year;
-            IsAvailable = true;
         }
 
         // ============= METHODS =============
-        public void Lend()
-        {
-            IsAvailable = false;
-        }
+        public void Lend() => IsAvailable = false;
 
-        public void Return()
-        {
-            IsAvailable = true;
-        }
+        public void Return() => IsAvailable = true;
 
         public override string ToString()
         {

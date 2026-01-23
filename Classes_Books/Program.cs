@@ -33,7 +33,10 @@ do
             break;
         case 0:
             // EXIT
-            Console.WriteLine($"System closed");
+            Console.WriteLine("System closed");
+            break;
+        default:
+            Console.WriteLine("Invalid option");
             break;
     }
 } while (option != 0);

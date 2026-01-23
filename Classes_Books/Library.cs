@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+// using System;
+// using System.Collections.Generic;
 
 namespace LibrarySystem
 {
@@ -17,8 +16,7 @@ namespace LibrarySystem
             string author = Console.ReadLine();
             Console.Write("Publication year: ");
             int year = int.Parse(Console.ReadLine());
-            Book book = new Book(title, author, year);
-            _collection.Add(book);
+            _collection.Add(new Book(title, author, year));
             Console.WriteLine("\nBook added successfully!");
         }
 
@@ -26,11 +24,11 @@ namespace LibrarySystem
         {
             ListBooks();
             Console.Write($"\nChoose the book to lend: ");
-            int index = int.Parse(Console.ReadLine());
-            if (index > 0 && index <= _collection.Count && _collection[index - 1].IsAvailable)
+            int index = int.Parse(Console.ReadLine()) - 1;
+            if (index >= 0 && index < _collection.Count && _collection[index].IsAvailable)
             {
-                _collection[index - 1].Lend();
-                Console.WriteLine($"Book \"{_collection[index - 1].Title}\" lent successfully!");
+                _collection[index].Lend();
+                Console.WriteLine($"Book \"{_collection[index].Title}\" lent successfully!");
             }
             else
             {
@@ -42,13 +40,11 @@ namespace LibrarySystem
         {
             ListBooks();
             Console.Write("\nChoose the book to return: ");
-            int index = int.Parse(Console.ReadLine());
-            if (index > 0 && index <= _collection.Count && !_collection[index - 1].IsAvailable)
+            int index = int.Parse(Console.ReadLine()) - 1;
+            if (index >= 0 && index < _collection.Count && !_collection[index].IsAvailable)
             {
-                _collection[index - 1].Return();
-                Console.WriteLine(
-                    $"Book \"{_collection[index - 1].Title}\" returned successfully!"
-                );
+                _collection[index].Return();
+                Console.WriteLine($"Book \"{_collection[index].Title}\" returned successfully!");
             }
             else
             {
@@ -60,21 +56,27 @@ namespace LibrarySystem
         {
             if (_collection.Count == 0)
             {
-                Console.WriteLine($"===========================LIBRARY IS EMPTY===========================
+                Console.WriteLine(
+                    $"===========================LIBRARY IS EMPTY==========================="
+                );
+
                 return;
             }
             else
             {
-                Console.WriteLine($"\n===========================LIBRARY COLLECTION===========================
+                Console.WriteLine(
+                    $"\n===========================LIBRARY COLLECTION==========================="
+                );
+
                 for (int i = 0; i < _collection.Count; i++)
                     Console.WriteLine($"{i + 1, -3} | {_collection[i], -30}");
             }
         }
 
-		// IEnumerable<T> → a sequence of T that I can iterate across
-		public IEnumerable<Book> GetBooks()
-		{
-			return _collection;
-		}
+        // IEnumerable<T> → a sequence of T that I can iterate across
+        // public IEnumerable<Book> GetBooks()
+        // {
+        // 	return _collection;
+        // }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using LibrarySystem;
 
-Library collection = new();
-int option = 0;
+Library library = new();
+int option;
 
 do
 {
@@ -12,27 +12,27 @@ do
     Console.WriteLine("4) List library collection");
     Console.WriteLine("0) Exit");
     Console.Write("Choose an option: ");
-    option = int.Parse(Console.ReadLine());
+
+    if (!int.TryParse(Console.ReadLine(), out option))
+    {
+        Console.WriteLine("Invalid option! Choose again");
+        continue;
+    }
     switch (option)
     {
         case 1:
-            // ADD BOOK
-            collection.AddBook();
+            AddBook(library);
             break;
         case 2:
-            // LEND BOOK
-            collection.LendBook();
+            LendBook(library);
             break;
         case 3:
-            // RETURN BOOK
-            collection.ReturnBook();
+            ReturnBook(library);
             break;
         case 4:
-            // LIST BOOKS
-            collection.ListBooks();
+            ListBooks(library);
             break;
         case 0:
-            // EXIT
             Console.WriteLine("System closed");
             break;
         default:
@@ -40,3 +40,70 @@ do
             break;
     }
 } while (option != 0);
+
+// ========================HELPER METHODS========================
+void AddBook(Library library)
+{
+    Console.Write($"Book title: ");
+    string title = Console.ReadLine();
+    Console.Write($"Author: ");
+    string author = Console.ReadLine();
+    Console.Write($"Publication year: ");
+    if (!int.TryParse(Console.ReadLine(), out int year))
+    {
+        Console.Write($"Invalid year.");
+        return;
+    }
+    library.AddBook(new Book(title, author, year));
+    Console.WriteLine($"Book \"{title}\" added successfully!");
+}
+
+void LendBook(Library library)
+{
+    ListBooks(library);
+    Console.Write($"\nChoose the book to lend: ");
+    if (!int.TryParse(Console.ReadLine(), out int index))
+    {
+        Console.WriteLine($"Invalid option or book already lent");
+        return;
+    }
+    else
+    {
+        library.LendBook(index - 1);
+        Console.WriteLine($"Book lent successfully!");
+    }
+}
+void ReturnBook(Library library)
+{
+    ListBooks(library);
+    Console.Write($"\nChoose the book to return: ");
+    if (int.TryParse(Console.ReadLine(), out int index))
+    {
+        library.ReturnBook(index - 1);
+        Console.WriteLine($"Book returned successfully!");
+    }
+    else
+    {
+        Console.WriteLine($"Invalid option or book already returned");
+        return;
+    }
+}
+void ListBooks(Library library)
+{
+    var books = library.GetBooks();
+    if (!books.Any())
+    {
+        Console.WriteLine($"Library is empty");
+        return;
+    }
+    Console.WriteLine(
+        $"\n===========================LIBRARY COLLECTION==========================="
+    );
+    int i = 1;
+    foreach (var book in books)
+    {
+        Console.WriteLine(
+            $"{i++, -3} | {(book.IsAvailable ? "Available" : "Borrowed"), -10} | {book.Title, -30} | {book.Author} ({book.Year})"
+        );
+    }
+}

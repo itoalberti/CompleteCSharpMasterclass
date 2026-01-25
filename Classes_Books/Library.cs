@@ -1,6 +1,3 @@
-// using System;
-// using System.Collections.Generic;
-
 namespace LibrarySystem
 {
     public class Library
@@ -8,92 +5,80 @@ namespace LibrarySystem
         // private List<Book> _collection = new List<Book>();
         private readonly List<Book> _collection = new();
 
-        public void AddBook(Book book)
+        public void AddBook()
         {
-            _collection.Add(book);
-
-            // Console.Write("\nBook title: ");
-            // string title = Console.ReadLine();
-            // Console.Write("Author: ");
-            // string author = Console.ReadLine();
-            // Console.Write("Publication year: ");
-            // int year = int.Parse(Console.ReadLine());
-            // _collection.Add(new Book(title, author, year));
-            // Console.WriteLine("\nBook added successfully!");
+            // _collection.Add(book);
+            Console.Write("\nBook title: ");
+            string title = Console.ReadLine();
+            Console.Write("Author: ");
+            string author = Console.ReadLine();
+            Console.Write("Publication year: ");
+            int year = int.Parse(Console.ReadLine());
+            _collection.Add(new Book(title, author, year));
+            Console.WriteLine("\nBook added successfully!");
         }
 
-        public bool LendBook(int index)
+        public void LendBook()
         {
-            // ListBooks();
-            // Console.Write($"\nChoose the book to lend: ");
-            // int index = int.Parse(Console.ReadLine()) - 1;
-            // if (index >= 0 && index < _collection.Count && _collection[index].IsAvailable)
-            // {
-            //     _collection[index].Lend();
-            //     Console.WriteLine($"Book \"{_collection[index].Title}\" lent successfully!");
-            // }
-            // else
-            // {
-            //     Console.WriteLine($"Invalid option or book already lent");
-            // }
-            if (!IsValidIndex(index) || !_collection[index].IsAvailable)
-                return false;
-            // if (!_collection[index].IsAvailable)
-            //     return false;
-            _collection[index].Lend();
-            return true;
+            if (!_collection.Any())
+            {
+                ListBooks();
+                return;
+            }
+            ListBooks();
+            Console.Write($"\nChoose the book to lend: ");
+            int index = int.Parse(Console.ReadLine());
+            if (index > 0 && index <= _collection.Count && _collection[index - 1].IsAvailable)
+            {
+                _collection[index - 1].Lend();
+                Console.WriteLine($"Book \"{_collection[index - 1].Title}\" lent successfully!");
+            }
+            else
+                Console.WriteLine($"Invalid option or book already lent");
         }
 
-        public bool ReturnBook(int index)
+        public void ReturnBook()
         {
-            // ListBooks();
-            // Console.Write("\nChoose the book to return: ");
-            // int index = int.Parse(Console.ReadLine()) - 1;
-            // if (index >= 0 && index < _collection.Count && !_collection[index].IsAvailable)
-            // {
-            //     _collection[index].Return();
-            //     Console.WriteLine($"Book \"{_collection[index].Title}\" returned successfully!");
-            // }
-            // else
-            // {
-            //     Console.WriteLine($"Invalid option or book already returned");
-            // }
-            if (!IsValidIndex(index) || _collection[index].IsAvailable)
-                return false;
-            _collection[index].Return();
-            return true;
+            if (!_collection.Any())
+            {
+                ListBooks();
+                return;
+            }
+            ListBooks();
+            Console.Write($"\nChoose the book to return: ");
+            int index = int.Parse(Console.ReadLine());
+            if (index > 0 && index <= _collection.Count && !_collection[index - 1].IsAvailable)
+            {
+                _collection[index - 1].Return();
+                Console.WriteLine(
+                    $"Book \"{_collection[index - 1].Title}\" returned successfully!"
+                );
+            }
+            else
+                Console.WriteLine($"Invalid option or book already returned");
         }
 
         // public IEnumerable<T> → a sequence of T that I can iterate across
-        public IEnumerable<Book> GetBooks()
+        public IEnumerable<Book> GetBooks() => _collection;
+
+        public void ListBooks()
         {
-            return _collection;
+            if (_collection.Count == 0)
+            {
+                Console.WriteLine(
+                    $"========================================LIBRARY IS EMPTY========================================"
+                );
+                return;
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"\n=======================================LIBRARY COLLECTION======================================="
+                );
+
+                for (int i = 0; i < _collection.Count; i++)
+                    Console.WriteLine($"{i + 1, -3} | {_collection[i], -30}");
+            }
         }
-
-        private bool IsValidIndex(int index)
-        {
-            return index >= 0 && index < _collection.Count;
-        }
-
-        // public void ListBooks()
-        // {
-        //     if (_collection.Count == 0)
-        //     {
-        //         Console.WriteLine(
-        //             $"===========================LIBRARY IS EMPTY==========================="
-        //         );
-
-        //         return;
-        //     }
-        //     else
-        //     {
-        // Console.WriteLine(
-        //     $"\n===========================LIBRARY COLLECTION==========================="
-        // );
-
-        // for (int i = 0; i < _collection.Count; i++)
-        //     Console.WriteLine($"{i + 1, -3} | {_collection[i], -30}");
-        //     }
-        // }
     }
 }

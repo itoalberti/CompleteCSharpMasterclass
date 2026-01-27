@@ -4,9 +4,9 @@ internal class Question // internal → only Quiz consumes Question
 {
     private static int _nextID = 1;
     public int QuestionID { get; }
-    public string QuestionText { get; set; }
-    public string[] Answers { get; set; }
-    public int CorrectAnswerIndex { get; set; }
+    public string QuestionText { get; }
+    public string[] Answers { get; }
+    public int CorrectAnswerIndex { get; }
 
     public Question(string questionText, string[] answers, int correctAnswerIndex)
     {

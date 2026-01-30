@@ -6,7 +6,6 @@ public class Employee
     public string Name { get; set; }
     public DateOnly Birthdate { get; set; }
 
-    // ============= CONSTRUCTOR =============
     public Employee(string cpf, string name, DateOnly birthdate)
     {
         if (string.IsNullOrWhiteSpace(cpf))
@@ -20,15 +19,15 @@ public class Employee
         Birthdate = birthdate;
     }
 
-    // ============= METHODS =============
     public void UpdateName(string newName)
     {
         if (string.IsNullOrWhiteSpace(newName))
             throw new ArgumentException("⛔️ New name is invalid! ⛔️");
+        Name = newName;
     }
 
     public override string ToString()
     {
-        return $"ID: {Id} | Name: {Name} | CPF: {Cpf} | Birthdate: {Birthdate:dd/MM/yyyy}";
+        return $"ID: {Id.ToString().PadLeft(2)} | Name: {Name.PadRight(25)} | CPF: {Cpf.PadLeft(11)} | Birthdate: {Birthdate:dd/MM/yyyy}";
     }
 }

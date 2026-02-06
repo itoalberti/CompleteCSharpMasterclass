@@ -1,28 +1,16 @@
-// using CRUDLayers.Models;
-
 using CRUDLayers.Models;
 using CRUDLayers.ProductServices;
-using CRUDLayers.Repositories;
 
 public class ProductController
 {
-    public ProductService _svc;
+    // private readonly → the service is an internal tool for the controller.
+    // Nobody outside of ProductController is allowed to switch the service with something else
+    private readonly ProductService _svc;
 
     public ProductController(ProductService svc) => _svc = svc;
 
     public void CreateProduct(string name, double price, int qty) =>
         _svc.Create(new Product(name, price, qty));
+
+    public void ListProducts() => _svc.GetAllProducts();
 }
-
-// public class ProductController
-// {
-// 	private readonly ProductService _service = new();
-// 	// Methods are all "void" unless the interface needs to show their information
-// 	public void Create
-// 	{
-
-// 	}
-// 	public List<Product> GetProducts()=>_service.GetAllProducts();
-// 	public void RemoveProduct(int id) => _service.RemoveProduct(id);
-
-// }

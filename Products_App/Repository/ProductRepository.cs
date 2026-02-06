@@ -19,6 +19,8 @@ namespace CRUDLayers.Repositories
         }
 
         public List<Product> ListProducts() => _allProducts;
+
+        public Product? FindProductByID(int id) => _allProducts.FirstOrDefault(p => p.Id == id);
     }
 }
 

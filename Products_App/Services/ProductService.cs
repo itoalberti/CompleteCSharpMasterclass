@@ -43,6 +43,8 @@ namespace CRUDLayers.ProductServices
                 throw new Exception("🚫 There are no products in the database 🚫");
         }
 
+        // public void GetProductByID() { }
+
         private bool ValidateProduct(Product product)
         {
             if (string.IsNullOrWhiteSpace(product.Name))

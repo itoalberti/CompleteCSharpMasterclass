@@ -42,7 +42,7 @@ public class Menu
                         GetAll();
                         break;
                     case "3":
-                        GetByID();
+                        // GetByID();
                         break;
                     case "4":
                         break;

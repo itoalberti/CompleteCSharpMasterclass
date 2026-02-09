@@ -1,5 +1,8 @@
+using System.Drawing;
 using System.Globalization;
+using System.Net.WebSockets;
 using System.Security.Authentication.ExtendedProtection;
+using CRUDLayers.Models;
 using CRUDLayers.ProductServices;
 using CRUDLayers.Repositories;
 using CRUDLayers.UI;
@@ -17,7 +20,6 @@ public class Menu
     {
         while (true)
         {
-            Console.WriteLine($"");
             ColorChanges.WriteInColor(
                 "\n===== 🍎🥦🥩 BERNIE'S BEST GROCERIES 🧀🍗🥕 =====\n",
                 ConsoleColor.Green
@@ -42,11 +44,12 @@ public class Menu
                         GetAll();
                         break;
                     case "3":
-                        // GetByID();
+                        FindByID();
                         break;
                     case "4":
                         break;
                     case "5":
+                        DeleteProduct();
                         break;
                     case "0":
                         ColorChanges.WriteInColor($"\n🛑 SYSTEM CLOSED 🛑\n\n", ConsoleColor.Red);
@@ -63,7 +66,7 @@ public class Menu
             catch (Exception e)
             {
                 ColorChanges.WriteInColor(
-                    $"\n============ERROR============\n{e}",
+                    $"\n=================ERROR=================\n{e}",
                     ConsoleColor.Red
                 );
             }
@@ -86,4 +89,48 @@ public class Menu
     }
 
     public void GetAll() => _controller.ListProducts();
+
+    private bool FindByID()
+    {
+        while (true)
+        {
+            Console.WriteLine($"\nType in the ID of the product:");
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                var productFound = _controller.FindByID(id);
+                ColorChanges.WriteInColor(
+                    $"______________✔️ PRODUCT WAS FOUND ✔️_______________",
+                    ConsoleColor.Green
+                );
+                ColorChanges.WriteInColor(
+                    $"\n  ID  | NAME                  | PRICE [$] | QUANTITY\n",
+                    ConsoleColor.DarkBlue
+                );
+                Console.WriteLine(
+                    $"{productFound.Id, 5} | {productFound.Name, -21} | {productFound.Price, -9} | {productFound.Qty, -8}"
+                );
+                return false;
+            }
+            ColorChanges.WriteInColor($"\n⚠️ INVALID ID ⚠️\n", ConsoleColor.Yellow);
+        }
+    }
+
+    private bool DeleteProduct()
+    {
+        while (true)
+        {
+            Console.WriteLine($"\nType in the ID of the product you want to remove:");
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                string productName = _controller.FindByID(id).Name;
+                _controller.RemoveProduct(id);
+                ColorChanges.WriteInColor(
+                    $"\n✔️ PRODUCT \"{id} - {productName.ToUpper()}\" REMOVED SUCCESSFULLY! ✔️\n",
+                    ConsoleColor.DarkGreen
+                );
+                return false;
+            }
+            ColorChanges.WriteInColor($"\n⚠️ INVALID ID ⚠️\n", ConsoleColor.Yellow);
+        }
+    }
 }

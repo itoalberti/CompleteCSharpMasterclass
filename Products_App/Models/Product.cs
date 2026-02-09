@@ -19,12 +19,12 @@ namespace CRUDLayers.Models
 
         // internal → only ProductRepository needs access to this method. Controller, Service and Menu should not be able to modify the ID
         internal void SetID(int id) => Id = id;
-    }
 
-    // public void UpdateProduct(string newName, double newPrice, int newQty)
-    // {
-    //     Name = newName;
-    //     Price = newPrice;
-    //     Qty = newQty;
-    // }
+        public void UpdateProduct(string newName, double newPrice, int newQty)
+        {
+            Name = newName;
+            Price = newPrice;
+            Qty = newQty;
+        }
+    }
 }

@@ -40,19 +40,36 @@ namespace CRUDLayers.ProductServices
                     );
             }
             else
-                throw new Exception("🚫 There are no products in the database 🚫");
+                throw new Exception("🚫 THERE ARE NO PRODUCTS IN THE DATABASE 🚫");
         }
 
-        // public void GetProductByID() { }
+        public Product GetByID(int id)
+        {
+            if (id <= 0)
+                throw new Exception($"🚫 ID {id} IS INVALID 🚫");
+
+            var product = _productRepository.FindProductByID(id);
+            if (product is null)
+                throw new Exception($"🚫 PRODUCT ID WAS NOT FOUND 🚫");
+            return product;
+        }
+
+        public void RemoveProduct(int id)
+        {
+            var product = _productRepository.FindProductByID(id);
+            if (product == null)
+                throw new Exception("🚫 PRODUCT ID WAS NOT FOUND 🚫");
+            _productRepository.DeleteProduct(product);
+        }
 
         private bool ValidateProduct(Product product)
         {
             if (string.IsNullOrWhiteSpace(product.Name))
-                throw new Exception("🚫 Name is invalid 🚫");
+                throw new Exception("🚫 NAME IS INVALID 🚫");
             if (double.IsNegative(product.Price) || double.IsNaN(product.Price))
-                throw new Exception("🚫 Price is invalid 🚫");
+                throw new Exception("🚫 PRICE IS INVALID 🚫");
             if (product.Qty < 0)
-                throw new Exception("🚫 Quantity must be a non-negative number 🚫");
+                throw new Exception("🚫 QUANTITY MUST BE A NON-NEGATIVE NUMBER 🚫");
             return true;
         }
     };

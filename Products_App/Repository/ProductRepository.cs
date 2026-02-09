@@ -21,6 +21,14 @@ namespace CRUDLayers.Repositories
         public List<Product> ListProducts() => _allProducts;
 
         public Product? FindProductByID(int id) => _allProducts.FirstOrDefault(p => p.Id == id);
+
+        public void UpdateProduct(Product product)
+        {
+            Product updatedProduct = FindProductByID(product.Id);
+            updatedProduct.UpdateProduct(product.Name, product.Price, product.Qty);
+        }
+
+        public void DeleteProduct(Product product) => _allProducts.Remove(product);
     }
 }
 

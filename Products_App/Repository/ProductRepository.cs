@@ -10,7 +10,7 @@ namespace CRUDLayers.Repositories
         private int _nextID = 0;
 
         // public AddProduct → ProductService needs access to save data in it
-        public Product AddProduct(Product newProduct)
+        public Product Add(Product newProduct)
         {
             _nextID++;
             newProduct.SetID(_nextID);
@@ -18,44 +18,18 @@ namespace CRUDLayers.Repositories
             return newProduct;
         }
 
-        public List<Product> ListProducts() => _allProducts;
+        public IReadOnlyList<Product> GetAll() => _allProducts.AsReadOnly();
 
-        public Product? FindProductByID(int id) => _allProducts.FirstOrDefault(p => p.Id == id);
+        public Product? GetById(int id) => _allProducts.FirstOrDefault(p => p.Id == id);
 
-        public void UpdateProduct(Product product)
+        public void Update(int id, string name, double price, int qty)
         {
-            Product updatedProduct = FindProductByID(product.Id);
-            updatedProduct.UpdateProduct(product.Name, product.Price, product.Qty);
+            var updatedProduct = GetById(id);
+            if (updatedProduct == null)
+                throw new ArgumentNullException("🚫 PRODUCT ID WAS NOT FOUND 🚫");
+            updatedProduct.UpdateProduct(name, price, qty);
         }
 
-        public void DeleteProduct(Product product) => _allProducts.Remove(product);
+        public void Delete(Product product) => _allProducts.Remove(product);
     }
 }
-
-// LIST BY ID
-// public Product GetProductByID(int id) => _allProducts.FirstOrDefault(p => p.Id == id);
-
-// UPDATE
-// public void UpdateProduct(Product product)
-// {
-//     var updatedProduct = GetProductByID(product.Id);
-//     if (updatedProduct == null)
-//         return;
-
-//     updatedProduct.Name = product.Name;
-//     updatedProduct.Price = product.Price;
-//     updatedProduct.Qty = product.Qty;
-// }
-
-// public class ProductRepository
-// {
-//     public readonly List<Product> _allProducts = new();
-//     public int _nextID = 1;
-
-//     public Product AddProduct(Product newProduct)
-//     {
-//         _nextID++;
-//         _allProducts.Add(newProduct);
-//         return newProduct;
-//     }
-// }

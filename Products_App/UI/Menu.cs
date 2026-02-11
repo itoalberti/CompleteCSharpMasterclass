@@ -41,12 +41,13 @@ public class Menu
                         CreateProduct();
                         break;
                     case "2":
-                        GetAll();
+                        ListProducts();
                         break;
                     case "3":
                         FindByID();
                         break;
                     case "4":
+                        UpdateProduct();
                         break;
                     case "5":
                         DeleteProduct();
@@ -88,18 +89,18 @@ public class Menu
         _controller.CreateProduct(name, price, qty);
     }
 
-    public void GetAll() => _controller.ListProducts();
+    public void ListProducts() => _controller.ListProducts();
 
     private bool FindByID()
     {
         while (true)
         {
-            Console.WriteLine($"\nType in the ID of the product:");
+            Console.Write($"\nType in the ID of the product: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
                 var productFound = _controller.FindByID(id);
                 ColorChanges.WriteInColor(
-                    $"______________✔️ PRODUCT WAS FOUND ✔️_______________",
+                    $"\n______________✔️ PRODUCT WAS FOUND ✔️_______________",
                     ConsoleColor.Green
                 );
                 ColorChanges.WriteInColor(
@@ -111,21 +112,42 @@ public class Menu
                 );
                 return false;
             }
-            ColorChanges.WriteInColor($"\n⚠️ INVALID ID ⚠️\n", ConsoleColor.Yellow);
+            throw new ArgumentException($"\n⚠️ INVALID ID ⚠️\n");
         }
+    }
+
+    public void UpdateProduct()
+    {
+        Console.Write($"Type in the ID of the product you want to edit: ");
+        if (int.TryParse(Console.ReadLine(), out int id) && id > 0)
+        {
+            Console.Write($"Type in the new name: ");
+            string newName = Console.ReadLine();
+            Console.Write($"Type in the new price: ");
+            double.TryParse(Console.ReadLine(), out double newPrice);
+            Console.Write($"Type in the new quantity: ");
+            int newQty = int.Parse(Console.ReadLine());
+            _controller.UpdateProduct(id, newName, newPrice, newQty);
+            ColorChanges.WriteInColor(
+                $"\n✔️ PRODUCT UPDATED SUCCESSFULLY! ✔️\n",
+                ConsoleColor.Green
+            );
+        }
+        else
+            throw new ArgumentException("⚠️ INVALID ID ⚠️");
     }
 
     private bool DeleteProduct()
     {
         while (true)
         {
-            Console.WriteLine($"\nType in the ID of the product you want to remove:");
+            Console.Write($"\nType in the ID of the product you want to remove: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
                 string productName = _controller.FindByID(id).Name;
                 _controller.RemoveProduct(id);
                 ColorChanges.WriteInColor(
-                    $"\n✔️ PRODUCT \"{id} - {productName.ToUpper()}\" REMOVED SUCCESSFULLY! ✔️\n",
+                    $"\n✔️ PRODUCT [{id} - {productName.ToUpper()}] REMOVED SUCCESSFULLY! ✔️\n",
                     ConsoleColor.DarkGreen
                 );
                 return false;

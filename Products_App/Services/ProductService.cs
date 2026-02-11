@@ -1,3 +1,6 @@
+using System.ComponentModel;
+using System.Net.Quic;
+using System.Security.Cryptography.X509Certificates;
 using CRUDLayers.Models;
 using CRUDLayers.Repositories;
 using CRUDLayers.UI;
@@ -16,7 +19,7 @@ namespace CRUDLayers.ProductServices
         public void Create(Product product)
         {
             if (ValidateProduct(product))
-                _productRepository.AddProduct(product);
+                _productRepository.Add(product);
             ColorChanges.WriteInColor(
                 $"\n  ID  | NAME                  | PRICE [$] | QUANTITY\n",
                 ConsoleColor.Blue
@@ -28,48 +31,65 @@ namespace CRUDLayers.ProductServices
 
         public void GetAllProducts()
         {
-            if (_productRepository.ListProducts().Any())
+            if (_productRepository.GetAll().Any())
             {
                 ColorChanges.WriteInColor(
                     $"\n  ID  | NAME                  | PRICE [$] | QUANTITY \n",
                     ConsoleColor.DarkBlue
                 );
-                foreach (Product product in _productRepository.ListProducts())
+                foreach (Product product in _productRepository.GetAll())
                     Console.WriteLine(
                         $"{product.Id, 5} | {product.Name, -21} | {product.Price, -9} | {product.Qty, -8}"
                     );
             }
             else
-                throw new Exception("🚫 THERE ARE NO PRODUCTS IN THE DATABASE 🚫");
+                throw new ArgumentNullException("🚫 THERE ARE NO PRODUCTS IN THE DATABASE 🚫");
         }
 
-        public Product GetByID(int id)
+        public Product GetById(int id)
         {
             if (id <= 0)
-                throw new Exception($"🚫 ID {id} IS INVALID 🚫");
+                throw new ArgumentException($"🚫 ID MUST BE GREATER THAN ZERO 🚫");
 
-            var product = _productRepository.FindProductByID(id);
+            var product = _productRepository.GetById(id);
             if (product is null)
-                throw new Exception($"🚫 PRODUCT ID WAS NOT FOUND 🚫");
+                throw new KeyNotFoundException($"🚫 PRODUCT ID {id} WAS NOT FOUND 🚫");
             return product;
+        }
+
+        public void UpdateProduct(int id, string name, double price, int qty)
+        {
+            if (id <= 0)
+                throw new ArgumentException("🚫 ID MUST BE GREATER THAN ZERO 🚫");
+            var product =
+                _productRepository.GetById(id)
+                ?? throw new KeyNotFoundException($"🚫 THERE IS NO PRODUCT WITH ID {id} 🚫");
+            ValidateProduct(new Product(name, price, qty));
+            _productRepository.Update(id, name, price, qty);
         }
 
         public void RemoveProduct(int id)
         {
-            var product = _productRepository.FindProductByID(id);
+            var product = _productRepository.GetById(id);
             if (product == null)
-                throw new Exception("🚫 PRODUCT ID WAS NOT FOUND 🚫");
-            _productRepository.DeleteProduct(product);
+                throw new KeyNotFoundException($"🚫 PRODUCT ID {id} WAS NOT FOUND 🚫");
+            _productRepository.Delete(product);
         }
 
         private bool ValidateProduct(Product product)
         {
             if (string.IsNullOrWhiteSpace(product.Name))
-                throw new Exception("🚫 NAME IS INVALID 🚫");
-            if (double.IsNegative(product.Price) || double.IsNaN(product.Price))
-                throw new Exception("🚫 PRICE IS INVALID 🚫");
+                throw new ArgumentException(
+                    "🚫 PRODUCT NAME CANNOT BE EMPTY 🚫",
+                    nameof(product.Name)
+                );
+            if (double.IsNaN(product.Price) || product.Price <= 0)
+                throw new ArgumentException("🚫 PRICE MUST BE GREATER THAN ZERO 🚫");
             if (product.Qty < 0)
-                throw new Exception("🚫 QUANTITY MUST BE A NON-NEGATIVE NUMBER 🚫");
+                throw new ArgumentException(
+                    "🚫 QUANTITY CANNOT BE NEGATIVE 🚫",
+                    nameof(product.Qty)
+                );
             return true;
         }
     };

@@ -3,6 +3,10 @@ myDog.Bark();
 myDog.MakeSound();
 myDog.Eat();
 
+Cow cow = new Cow();
+cow.Eat("grass");
+cow.MakeSound();
+
 Student martin = new Student("Martin", 14, 9950, "Fifth grade");
 martin.DisplayPersonInfo();
 
@@ -52,4 +56,17 @@ public class Student : Person
         Grade = grade;
         Console.WriteLine($"Student constructor called");
     }
+}
+
+public interface IAnimal
+{
+    void MakeSound();
+    void Eat(string food);
+}
+
+public class Cow : IAnimal
+{
+    public void MakeSound() => Console.WriteLine($"The cow makes MOO");
+
+    public void Eat(string food) => Console.WriteLine($"The cow eats {food}");
 }

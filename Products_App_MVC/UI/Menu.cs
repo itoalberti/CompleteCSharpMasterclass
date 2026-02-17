@@ -22,6 +22,7 @@ public class Menu
             Console.WriteLine($"3) Find a product by its ID");
             Console.WriteLine($"4) Update a product");
             Console.WriteLine($"5) Delete a product");
+            Console.WriteLine($"6) Place an order for a product");
             Console.WriteLine($"0) Exit program");
             Console.Write($"Type in the option you want: ");
             string option = Console.ReadLine().Trim();
@@ -45,6 +46,9 @@ public class Menu
                     case "5":
                         DeleteProduct();
                         break;
+                    // case "6":
+                    // PlaceOrder();
+                    // break;
                     case "0":
                         ColorChanges.WriteInColor($"\n🛑 SYSTEM CLOSED 🛑\n\n", ConsoleColor.Red);
 
@@ -140,4 +144,14 @@ public class Menu
             ConsoleColor.DarkGreen
         );
     }
+
+    // private void PlaceOrder()
+    // {
+    //     Console.WriteLine($"Type in the ID of the product of which you want to place your order: ");
+    //     string id = Console.ReadLine();
+    //     var product = _controller.FindByID(id);
+    //     Console.WriteLine($"How many units of {product.Name} will you buy?");
+    //     if (!int.TryParse(Console.ReadLine(), out int parsedQty) || parsedQty <= 0)
+    //         throw new ArgumentException("🚫 PRODUCT QUANTITY MUST BE A POSITIVE INTEGER 🚫 ");
+    // }
 }

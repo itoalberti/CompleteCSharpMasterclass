@@ -49,6 +49,11 @@ public class ProductController
         _repository.Delete(product);
     }
 
+    // public void PlaceOrder(string id)
+    // {
+    //     var product = FindByID(id);
+    // }
+
     private static void ValidateProduct(
         string name,
         string price,

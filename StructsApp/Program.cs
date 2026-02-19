@@ -23,9 +23,15 @@
 //     public void DisplayPoint() => Console.WriteLine($"Point: ({X}, {Y})");
 // }
 
+foreach (Months month in Enum.GetValues(typeof(Months)))
+    Console.WriteLine($"Month {(int)(month)}: {typeof(Months)}");
+
 Point p1 = new(0, 0);
 Point p2 = new(5, 12);
 Console.WriteLine($"Distance between points 1 and 2: {p1.DistanceTo(p2):F3}");
+
+DateTime myBirthday = new DateTime(1914, 06, 28);
+Console.WriteLine($"My birthday is {myBirthday:dd/MM/yyyy}");
 
 public struct Point
 {
@@ -45,4 +51,20 @@ public struct Point
 
         return Math.Sqrt(dx * dx + dy * dy);
     }
+}
+
+enum Months
+{
+    January,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    Semptember,
+    October,
+    November,
+    December,
 }

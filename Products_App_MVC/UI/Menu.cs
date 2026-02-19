@@ -4,10 +4,7 @@ public class Menu
 {
     private readonly ProductController _controller;
 
-    public Menu(ProductController controller)
-    {
-        _controller = controller;
-    }
+    public Menu(ProductController controller) => _controller = controller;
 
     public void ShowMenu()
     {
@@ -22,7 +19,7 @@ public class Menu
             Console.WriteLine($"3) Find a product by its ID");
             Console.WriteLine($"4) Update a product");
             Console.WriteLine($"5) Delete a product");
-            Console.WriteLine($"6) Place an order for a product");
+            // Console.WriteLine($"6) Place an order for a product");
             Console.WriteLine($"0) Exit program");
             Console.Write($"Type in the option you want: ");
             string option = Console.ReadLine().Trim();

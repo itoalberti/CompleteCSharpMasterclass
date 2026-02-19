@@ -13,8 +13,11 @@ public class ProductController
     public void CreateProduct(string name, string price, string qty)
     {
         name = name.Trim();
-        ValidateProduct(name, price, qty, out double parsedPrice, out int parsedQty);
-        _repository.CreateProduct(new Product(name, parsedPrice, parsedQty));
+        if (ValidateProduct(name, price, qty, out double parsedPrice, out int parsedQty))
+        {
+            _repository.CreateProduct(new Product(name, parsedPrice, parsedQty));
+            Logger.Log($"Product created in the database: \"{name}\"");
+        }
     }
 
     public IReadOnlyList<Product> ListProducts()
@@ -22,6 +25,7 @@ public class ProductController
         var products = _repository.GetAllProducts();
         if (!products.Any())
             throw new InvalidOperationException("🚫 THERE ARE NO PRODUCTS IN THE DATABASE 🚫");
+        Logger.Log($"All products were listed");
         return products;
     }
 
@@ -32,6 +36,7 @@ public class ProductController
         var product =
             _repository.GetProductById(parsedID)
             ?? throw new KeyNotFoundException($"🚫 PRODUCT ID \'{parsedID}\' DOES NOT EXIST 🚫");
+        Logger.Log($"Product \"{parsedID}\" {product.Name}\" was looked up by its ID");
         return product;
     }
 
@@ -39,13 +44,16 @@ public class ProductController
     {
         newName = newName.Trim();
         var product = FindByID(id);
-        ValidateProduct(newName, newPrice, newQty, out double parsedPrice, out int parsedQty);
+        if (ValidateProduct(newName, newPrice, newQty, out double parsedPrice, out int parsedQty))
+        { }
         _repository.UpdateProduct(product.Id, newName, parsedPrice, parsedQty);
+        Logger.Log($"Product \"{product.Id} - {product.Name}\" was updated");
     }
 
     public void RemoveProduct(string id)
     {
         var product = FindByID(id);
+        Logger.Log($"Product \"{product.Id} - {product.Name}\" was deleted from the database");
         _repository.Delete(product);
     }
 
@@ -54,7 +62,7 @@ public class ProductController
     //     var product = FindByID(id);
     // }
 
-    private static void ValidateProduct(
+    private static bool ValidateProduct(
         string name,
         string price,
         string qty,
@@ -68,5 +76,6 @@ public class ProductController
             throw new ArgumentException("🚫 PRICE MUST BE A NUMBER GREATER THAN ZERO 🚫");
         if (!int.TryParse(qty, out parsedQty) || parsedQty < 0)
             throw new ArgumentException("🚫 QUANTITY MUST BE A NON NEGATIVE INTEGER 🚫");
+        return true;
     }
 }

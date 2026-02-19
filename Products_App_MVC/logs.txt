@@ -1,0 +1,9 @@
+18/02/2026 09:15:23: Product created in the database: "sadf"
+18/02/2026 09:15:33: All products were listed
+18/02/2026 09:15:43: Product "1" sadf" was looked up by its ID
+18/02/2026 09:15:49: Product "1" sadf" was looked up by its ID
+18/02/2026 09:15:49: Product "1 - sdfgASDF" was updated
+18/02/2026 09:16:34: Product "1" sdfgASDF" was looked up by its ID
+18/02/2026 09:17:07: Product "1" sdfgASDF" was looked up by its ID
+18/02/2026 09:17:07: Product "1" sdfgASDF" was looked up by its ID
+18/02/2026 09:17:07: Product "1 - sdfgASDF" was deleted from the database

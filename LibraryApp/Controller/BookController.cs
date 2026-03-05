@@ -13,7 +13,6 @@ namespace LibraryApp.Controller
 
         public BookController(BookRepository repository) => _repository = repository;
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► CREATE BOOK ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public Book CreateBook(string title, string author, int year)
         {
             if (CheckBooksExistence(title, author))
@@ -24,7 +23,6 @@ namespace LibraryApp.Controller
             return _repository.CreateBook(newBook);
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► LIST ALL BOOKS ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book> ListAllBooks()
         {
             var allBooks = _repository.ListAllBooks();
@@ -33,12 +31,10 @@ namespace LibraryApp.Controller
             return allBooks;
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOK BY ID ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public Book GetBookById(int id) =>
             _repository.GetBookById(id)
             ?? throw new KeyNotFoundException($"NO BOOK WITH ID {id} WAS FOUND");
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOK BY TITLE ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book> GetBooksByTitle(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -60,7 +56,6 @@ namespace LibraryApp.Controller
             return books.AsReadOnly();
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOKS BY AUTHOR ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book> GetBooksByAuthor(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -82,7 +77,6 @@ namespace LibraryApp.Controller
             return books.AsReadOnly();
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► UPDATE BOOK STATUS ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public void UpdateBookStatus(Book bookToUpdate, BookStatus newStatus)
         {
             if (bookToUpdate.Status == newStatus)
@@ -92,7 +86,6 @@ namespace LibraryApp.Controller
             _repository.UpdateBookStatus(bookToUpdate, newStatus);
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► DELETE BOOK ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public void DeleteBook(Book bookToDelete)
         {
             if (bookToDelete.Status != BookStatus.Available)

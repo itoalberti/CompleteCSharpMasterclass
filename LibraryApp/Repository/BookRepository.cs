@@ -9,7 +9,6 @@ namespace LibraryApp.Repository
         private readonly List<Book> _allBooks = new();
         private int _nextId = 0;
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► CREATE BOOK ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public Book CreateBook(Book newBook)
         {
             _nextId++;
@@ -18,13 +17,10 @@ namespace LibraryApp.Repository
             return newBook;
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► LIST ALL BOOKS ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book> ListAllBooks() => _allBooks.AsReadOnly();
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOK BY ID ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public Book? GetBookById(int id) => _allBooks.FirstOrDefault(book => book.BookId == id);
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOKS BY AUTHOR ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book>? GetBooksByAuthor(string author)
         {
             var compareInfo = CultureInfo.InvariantCulture.CompareInfo;
@@ -39,7 +35,6 @@ namespace LibraryApp.Repository
                 .ToList();
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► GET BOOKS BY TITLE ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public IReadOnlyList<Book> GetBooksByTitle(string title)
         {
             var compareInfo = CultureInfo.InvariantCulture.CompareInfo;
@@ -54,11 +49,9 @@ namespace LibraryApp.Repository
                 .ToList();
         }
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► UPDATE BOOK STATUS ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public void UpdateBookStatus(Book bookToUpdate, BookStatus newStatus) =>
             bookToUpdate.UpdateBookStatus(newStatus);
 
-        // ►►►►►►►►►►►►►►►►►►►►►►►►►► DELETE BOOK ◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄◄
         public void DeleteBook(Book book) => _allBooks.Remove(book);
     }
 }

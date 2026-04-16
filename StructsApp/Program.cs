@@ -24,7 +24,7 @@
 // }
 
 foreach (Months month in Enum.GetValues(typeof(Months)))
-    Console.WriteLine($"Month {(int)(month)}: {typeof(Months)}");
+    Console.WriteLine($"Month {(int)(month) + 1}: {month}");
 
 Point p1 = new(0, 0);
 Point p2 = new(5, 12);

@@ -1,123 +1,39 @@
-﻿// Console.WriteLine($"Type in the message you want to log:");
-// string message = Console.ReadLine();
-// Logger logger = new();
+﻿using System.Net.WebSockets;
 
-// LogHandler logToConsoleHandler = logger.LogToConsole;
-// LogHandler logToFileHandler = logger.LogToFile;
+static void SuccessMessage(string msg) =>
+    Console.WriteLine($"PROCESS EXECUTED SUCCESSFULLY: {msg}");
 
-// logToConsoleHandler($"Hello, {message}! Printing to console.");
-// logToFileHandler($"{DateTime.Now} : {message}");
+static void ErrorMessage(string msg) => Console.WriteLine($"PROCESS FAILED: {msg}");
 
-// Area circleArea = new Circle().CircleArea;
-// Console.WriteLine($"Area of this circle is {circleArea([5])}");
+static int Sum(int a) => a + 1000;
 
-// // This delegate defines that every LogHandler must receive a string as parameter and return void
-// public delegate void LogHandler(string msg);
+static int Subtraction(int a) => a - 50;
 
-// public class Logger
-// {
-//     public void LogToConsole(string msg) => Console.WriteLine($"Console Log: {msg}");
+MyInt myInt = Sum;
+Console.WriteLine(myInt(1));
 
-//     public void LogToFile(string msg) =>
-//         System.IO.File.AppendAllText("log.txt", $"File Log: {msg}\n");
-// }
+myInt = Subtraction;
+Console.WriteLine(myInt(999));
 
-// public delegate float Area(int[] dimensions);
+MyDelegate myDelegate = SuccessMessage;
+myDelegate("Database Backup");
 
-// public class Circle
-// {
-//     public float Perimeneter(int radius) => (float)(Math.PI * 2 * radius);
+myDelegate = ErrorMessage;
+myDelegate("Kubernetes update");
 
-//     public float CircleArea(int radius) => (float)(Math.PI * radius * radius);
-// }
+DiscountCalculator price = ApplyBlackFridayDiscount;
+Console.WriteLine($"The price with Black Friday discount is {price(200)}");
 
-// public class Rectangle
-// {
-//     public int RectangleArea(int width, int height) => width * height;
-// }
+price = ApplyVIPDiscount;
+Console.WriteLine($"The price with VIP discount is {price(200)}");
 
-// public class Triangle
-// {
-//     public int TriangleArea(int width, int height) => width * height / 2;
-// }
+price = ApplyRegularDiscount;
+Console.WriteLine($"The price with regular discount is {price(200)}");
 
-// List<Produto> produtos = new List<Produto>
-// {
-//     new Produto { Nome = "Teclado", Preco = 150 },
-//     new Produto { Nome = "Mouse", Preco = 80 },
-//     new Produto { Nome = "Monitor", Preco = 1200 },
-//     new Produto { Nome = "Cabo HDMI", Preco = 30 },
-// };
+double ApplyBlackFridayDiscount(double price) => 0.7 * price;
+double ApplyVIPDiscount(double price) => 0.72 * price;
+double ApplyRegularDiscount(double price) => 0.75 * price;
 
-// // 3. O uso prático: Passamos a "regra" como se fosse um parâmetro
-// Console.WriteLine("Produtos Baratos (menos de 100):");
-// FiltrarEExibir(produtos, p => p.Preco < 100);
-
-// Console.WriteLine("\nProdutos Caros (mais de 1000):");
-// FiltrarEExibir(produtos, p => p.Preco > 1000);
-
-// // 2. O Método Genérico: Ele não sabe QUAL é o filtro, apenas sabe COMO aplicar um filtro
-// static void FiltrarEExibir(List<Produto> lista, FiltroProduto filtro)
-// {
-//     foreach (var prod in lista)
-//     {
-//         // O delegate decide se o produto entra ou não no resultado
-//         if (filtro(prod))
-//             Console.WriteLine($"- {prod.Nome}: R$ {prod.Preco}");
-//     }
-// }
-
-// // 1. Definição do Delegate: "Eu aceito qualquer função que receba um Produto e retorne um bool"
-// public delegate bool FiltroProduto(Produto p);
-
-// public class Produto
-// {
-//     public string Nome { get; set; }
-//     public decimal Preco { get; set; }
-// }
-
-List<Product> products = new
-{
-    new Product
-    {
-        Name = "Dish detergent",
-        Price = 3.50,
-        Qty = 120,
-    },
-    new Product
-    {
-        Name = "Paper straws",
-        Price = 1.85,
-        Qty = 1500,
-    },
-    new Product
-    {
-        Name = "Slow cooker",
-        Price = 125.60,
-        Qty = 0,
-    },
-    new Product
-    {
-        Name = "Blender",
-        Price = 87.88,
-        Qty = 3,
-    },
-};
-
-Console.WriteLine($"Products below $100:");
-
-static void FilterProducts(List<Product> products, FilterProduct filter)
-{
-    foreach (Product product in products)
-    {
-        if (filter(product))
-            Console.WriteLine($"- {prod.Name}: R$ {prod.Price}");
-    }
-}
-
-public class Product
-{
-    public string Name;
-    public float Price;
-    public int Qty;
-}
+public delegate void MyDelegate(string msg);
+public delegate int MyInt(int n);
+public delegate double DiscountCalculator(double price);

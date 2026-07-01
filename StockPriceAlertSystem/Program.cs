@@ -38,7 +38,7 @@
 
 Stock myStock = new Stock();
 StockAlert myAlert = new StockAlert();
-myStock.OnPriceChanged += myAlert.OnPriceChanged;
+myStock.StockPriceChanged += myAlert.OnPriceChanged;
 myStock.Threshold = 100m;
 Console.WriteLine($"Stock price = 50");
 myStock.Price = 50m;
@@ -49,11 +49,24 @@ myStock.Price = 9999m;
 
 public delegate void StockPriceChangeHandler(string msg);
 
+public class StockPriceChangedEventArgs : EventArgs
+{
+    public decimal Price { get; }
+
+    public StockPriceChangedEventArgs(decimal price)
+    {
+        Price = price;
+    }
+}
+
 public class Stock
 {
-    public event StockPriceChangeHandler OnPriceChanged;
+    // public event StockPriceChangeHandler OnPriceChanged;
+    public event EventHandler<StockPriceChangedEventArgs> StockPriceChanged;
 
-    protected void RaisePriceChangedEvent(string msg) => OnPriceChanged?.Invoke(msg);
+    // protected virtual void RaisePriceChangedEvent(StockPriceChangedEventArgs e) =>
+    protected virtual void OnStockPriceChanged(StockPriceChangedEventArgs e) =>
+        StockPriceChanged?.Invoke(this, e);
 
     private decimal _price;
     private decimal _threshold;
@@ -76,7 +89,9 @@ public class Stock
     }
 }
 
+// Subscriber class
 public class StockAlert
 {
-    public void OnPriceChanged(string msg) => Console.WriteLine($"STOCK PRICE ALERT: {msg}");
+    public void OnPriceChanged(object sender, StockPriceChangedEventArgs e) =>
+        Console.WriteLine($"STOCK PRICE ALERT: {e.Price}\nSender is {sender}");
 }

@@ -1,16 +1,18 @@
 ﻿EventPublisher publisher = new EventPublisher();
 EventSubscriber subscriber = new EventSubscriber();
 publisher.OnNotify += subscriber.OnEventRaised;
-publisher.RaiseEvent("TEST");
+publisher.RaiseEvent("TESTING THE OCCURRENCE OF AN EVENT");
 
-Console.WriteLine($"Type in a temperature:");
-double temperature = double.Parse(Console.ReadLine());
+Console.WriteLine($"Type in the temperature");
+decimal t = decimal.Parse(Console.ReadLine());
 TemperatureMonitor monitor = new TemperatureMonitor();
 TemperatureAlert alert = new TemperatureAlert();
 monitor.OnTemperatureChange += alert.OnTemperatureChange;
-monitor.Temperature = temperature;
+monitor.Threshold = 50;
+monitor.Temperature = t;
 
 public delegate void Notify(string msg);
+public delegate void TemperatureChangeHandler(string msg);
 
 public class EventPublisher
 {
@@ -21,32 +23,37 @@ public class EventPublisher
 
 public class EventSubscriber
 {
-    public void OnEventRaised(string msg) => Console.WriteLine($"Event received: {msg}");
+    public void OnEventRaised(string msg) => Console.WriteLine($"Event raised: {msg}");
 }
-
-public delegate void TemperatureChangeHandler(string msg);
 
 public class TemperatureMonitor
 {
     public event TemperatureChangeHandler OnTemperatureChange;
-    private double _temp;
-    public double Temperature
-    {
-        get { return _temp; }
-        set
-        {
-            _temp = value;
-            if (_temp > 30)
-                // Raise event
-                RaiseTemperatureChangeEvent("======Temperature is above 30°C======");
-        }
-    }
 
     protected virtual void RaiseTemperatureChangeEvent(string msg) =>
         OnTemperatureChange?.Invoke(msg);
+
+    private decimal _temperature;
+    private decimal _threshold;
+    public decimal Temperature
+    {
+        get { return _temperature; }
+        set
+        {
+            _temperature = value;
+            if (_temperature > Threshold)
+                RaiseTemperatureChangeEvent($"Temperature is above {Threshold}°C!");
+        }
+    }
+    public decimal Threshold
+    {
+        get { return _threshold; }
+        set { _threshold = value; }
+    }
 }
 
 public class TemperatureAlert
 {
-    public void OnTemperatureChange(string msg) => Console.WriteLine($"ALERT: {msg}");
+    public void OnTemperatureChange(string msg) =>
+        Console.WriteLine($"⚠️ TEMPERATURE ALERT: {msg}");
 }

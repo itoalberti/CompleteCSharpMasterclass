@@ -1,16 +1,5 @@
-﻿EventPublisher publisher = new EventPublisher();
-EventSubscriber subscriber = new EventSubscriber();
-publisher.OnNotify += subscriber.OnEventRaised;
-publisher.RaiseEvent("TEST");
-
-Console.WriteLine($"Type in a temperature:");
-double temperature = double.Parse(Console.ReadLine());
-TemperatureMonitor monitor = new TemperatureMonitor();
-TemperatureAlert alert = new TemperatureAlert();
-monitor.OnTemperatureChange += alert.OnTemperatureChange;
-monitor.Temperature = temperature;
-
-public delegate void Notify(string msg);
+﻿public delegate void Notify(string msg);
+public delegate void T_ChangeHandler(string msg);
 
 public class EventPublisher
 {
@@ -21,32 +10,31 @@ public class EventPublisher
 
 public class EventSubscriber
 {
-    public void OnEventRaised(string msg) => Console.WriteLine($"Event received: {msg}");
+    public void OnEventRaised(string msg) => Console.WriteLine($"EVENT RAISED: {msg}");
 }
 
-public delegate void TemperatureChangeHandler(string msg);
-
-public class TemperatureMonitor
+public class T_Monitor
 {
-    public event TemperatureChangeHandler OnTemperatureChange;
-    private double _temp;
-    public double Temperature
+    private decimal _t;
+    private decimal _threshold;
+
+    public decimal Threshold
     {
-        get { return _temp; }
-        set
-        {
-            _temp = value;
-            if (_temp > 30)
-                // Raise event
-                RaiseTemperatureChangeEvent("======Temperature is above 30°C======");
-        }
+        get { return _threshold; }
+        set { _threshold = value; }
     }
+    public decimal T
+    {
+        get { return _t; }
+		set
+		{
+			_t = value;
+			if (_t > Threshold)
+			{
+				// RAISE EVENT
+			}
+		}
 
-    protected virtual void RaiseTemperatureChangeEvent(string msg) =>
-        OnTemperatureChange?.Invoke(msg);
-}
-
-public class TemperatureAlert
-{
-    public void OnTemperatureChange(string msg) => Console.WriteLine($"ALERT: {msg}");
+				protected void RaiseT_ChangeEvent(string msg)=>Console.WriteLine($"TEMPERATURE CHANGE EVENT: {msg}");
+    }
 }
